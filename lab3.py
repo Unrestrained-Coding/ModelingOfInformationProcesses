@@ -16,7 +16,7 @@ def get_points_on_circle(n, r):
 
 
 def d(x, y):
-    return abs(x[0] - y[0]) + abs(x[1] - y[1])
+    return (x[0] - y[0])**2 + (x[1] - y[1])**2
 
 
 def get_matrix_cost(points):
@@ -68,55 +68,38 @@ def EigenVill(tij, ai, d):
 
     return edges
 
+def add_neighbours(i, cij, added, queue):
+    for j in range(len(cij)):
+        if cij[i][j] != float('inf') and not added[j]:
+            queue.append(((i,j), cij[i][j] ))
+
 def Prim(cij):
 
     edges = []
-    visited = np.zeros(len(cij), 'bool')
-    visited[0] = True
-    d = np.array([float('inf')]*len(cij))
-    last = np.array([-1]*len(cij))
-    queue = [0]
+    added = np.zeros(len(cij), 'bool')
+    added[0] = True
+    i = 0
+    queue = []
 
-    while len(queue) > 0:
-        i = queue.pop(0)
+    add_neighbours(i, cij, added, queue)
 
-        for j in range(len(cij)):
-            if not visited[j]:
-                if d[j] == float('inf'):
-                    d[j] = cij[i][j]
-                else:
-                    d[j] += cij[i][j]
+    while not np.all(added):
 
         min_value = float('inf')
-        min_j = None
+        min_ij = None
+        for ij, value in queue:
+            if value < min_value:
+                min_value = value
+                min_ij = ij
 
-        for j in range(len(cij)):
-            if d[j] < min_value and not visited[j]:
-                min_value = d[j]
-                min_j = j
-
-        if min_j is None:
+        if min_ij is None:
             break
 
-        if last[i] != -1:
-            u = last[i]
-
-            if cij[u][min_j] < cij[u][i] + cij[i][min_j]:
-                edges.append((u, min_j))
-                last[min_j] = u
-                queue.append(min_j)
-                visited[min_j] = True
-            else:
-                edges.append((i, min_j))
-                last[min_j] = i
-                queue.append(min_j)
-                visited[min_j] = True
-
-        else:
-            edges.append((i, min_j))
-            last[min_j] = i
-            queue.append(min_j)
-            visited[min_j] = True
+        queue.remove((min_ij, min_value))
+        if not added[min_ij[1]]:
+            edges.append(min_ij)
+            added[min_ij[1]] = True
+            add_neighbours(min_ij[1], cij, added, queue)
 
     return edges
 
@@ -169,7 +152,7 @@ def main():
         i, j = edge_index
         x1, y1 = all_points[i]
         x2, y2 = all_points[j]
-        plt.arrow(x1, y1, x2-x1, y2-y1, width=0.2, color="red")
+        plt.arrow(x1 * 1.5, y1 * 1.5, (x2-x1)/1.5, (y2-y1)/1.5, width=0.2, color="red")
         plt.text(x1, y1-1.5, i, fontsize=6)
         plt.text(x2, y2 - 1.5, j, fontsize=6)
 
@@ -190,7 +173,7 @@ def main():
         i, j = edge_index
         x1, y1 = all_points[i]
         x2, y2 = all_points[j]
-        plt.arrow(x1, y1, x2 - x1, y2 - y1, width=0.2, color="red")
+        plt.arrow(x1 * 1.5, y1 * 1.5, (x2-x1)/1.5, (y2-y1)/1.5, width=0.2, color="red")
         plt.text(x1, y1 - 1.5, i, fontsize=6)
         plt.text(x2, y2 - 1.5, j, fontsize=6)
 
