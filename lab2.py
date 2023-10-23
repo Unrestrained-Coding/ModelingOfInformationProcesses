@@ -50,10 +50,11 @@ def main():
     plt.plot(0, 0, 'o', color="gray", markersize=0.1)
     plt.plot(xx, xy, 'o', color="blue")
     plt.text(xx, xy + 1, "x*")
-    plt.text(xx+0.5, xy + 0.5, str(np.round((xx, xy), 2)), fontsize=7)
+    plt.text(xx+0.8, xy + 0.3, str(np.round((xx, xy), 2)), fontsize=7)
 
     ax = plt.gca()
     ax.set_aspect('equal', adjustable='box')
+    plt.savefig("lab2.jpg")
     plt.show()
 
 
