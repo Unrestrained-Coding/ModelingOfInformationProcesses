@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from pprint import pprint
 
 
 def get_points_on_circle(n, r):
@@ -128,10 +129,10 @@ def main():
     tij[1:,0] = 0
     tij[0,1:] = 0
 
-    print(ai)
-    print(all_points)
-    print(cij)
-    print(tij)
+    pprint(ai)
+    pprint(all_points)
+    pprint(cij)
+    pprint(tij)
 
     edges = EigenVill(tij, ai, d)
     edges1 = Prim(cij)
@@ -158,6 +159,7 @@ def main():
 
     ax = plt.gca()
     ax.set_aspect('equal', adjustable='box')
+    plt.savefig("EigenVill.jpg")
     plt.show()
 
     plt.plot(circle_x, circle_y, linewidth=0.9, color="red")
@@ -166,7 +168,6 @@ def main():
     ps = np.array(points).T
     pointsX, pointsY = ps[0], ps[1]
     plt.plot(pointsX, pointsY, 'o', color="gray")
-
     plt.plot(0, 0, 'o', color="blue")
 
     for edge_index in edges1:
@@ -179,6 +180,7 @@ def main():
 
     ax = plt.gca()
     ax.set_aspect('equal', adjustable='box')
+    plt.savefig("Prim.jpg")
     plt.show()
 
 
