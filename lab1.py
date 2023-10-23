@@ -69,6 +69,7 @@ def main():
     for x in [ci[index - 1] for index in _sorted_indexes]:
         plt.text(x, -1.5, str(round(x, 2)), fontsize=7)
 
+    plt.savefig("lab1.jpg")
     plt.show()
 
 
