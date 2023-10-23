@@ -152,9 +152,9 @@ def main():
         i, j = edge_index
         x1, y1 = all_points[i]
         x2, y2 = all_points[j]
-        plt.arrow(x1 * 1.5, y1 * 1.5, (x2-x1)/1.5, (y2-y1)/1.5, width=0.2, color="red")
-        plt.text(x1, y1-1.5, i, fontsize=6)
-        plt.text(x2, y2 - 1.5, j, fontsize=6)
+        plt.arrow(x1, y1, (x2-x1)*0.96, (y2-y1)*0.96, width=0.2, color="red")
+        plt.text(x1, y1-1.5, str(i) + "-" + str((x1, y1)), fontsize=6)
+        plt.text(x2, y2 - 1.5, str(j) + "-" + str((x2, y2)), fontsize=6)
 
     ax = plt.gca()
     ax.set_aspect('equal', adjustable='box')
@@ -173,9 +173,9 @@ def main():
         i, j = edge_index
         x1, y1 = all_points[i]
         x2, y2 = all_points[j]
-        plt.arrow(x1 * 1.5, y1 * 1.5, (x2-x1)/1.5, (y2-y1)/1.5, width=0.2, color="red")
-        plt.text(x1, y1 - 1.5, i, fontsize=6)
-        plt.text(x2, y2 - 1.5, j, fontsize=6)
+        plt.arrow(x1, y1, (x2-x1)*0.96, (y2-y1)*0.96, width=0.2, color="red")
+        plt.text(x1, y1 - 1.5, str(i) + "-"+ str((x1, y1)), fontsize=6)
+        plt.text(x2, y2 - 1.5, str(j) + "-"+ str((x2, y2)), fontsize=6)
 
     ax = plt.gca()
     ax.set_aspect('equal', adjustable='box')
