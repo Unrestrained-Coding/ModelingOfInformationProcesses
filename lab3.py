@@ -34,8 +34,8 @@ def get_matrix_cost(points):
     return cij
 
 
-def EigenVill(tij, ai, d):
-
+def EigenVill(tij, ai, d, cij):
+    S=0
     get_point = np.zeros((len(tij), len(tij)), 'bool')
     for i in range(len(tij)):
         for j in range(len(tij)):
@@ -64,10 +64,11 @@ def EigenVill(tij, ai, d):
             get_point[i,:] = True
             get_point[j,i] = True
             edges.append((i, j))
+            S += cij[i][j]
         else:
             get_point[i,j] = True
 
-    return edges
+    return edges, S
 
 def add_neighbours(i, cij, added, queue):
     for j in range(len(cij)):
@@ -75,6 +76,7 @@ def add_neighbours(i, cij, added, queue):
             queue.append(((i,j), cij[i][j] ))
 
 def Prim(cij):
+    S = 0
 
     edges = []
     added = np.zeros(len(cij), 'bool')
@@ -99,10 +101,11 @@ def Prim(cij):
         queue.remove((min_ij, min_value))
         if not added[min_ij[1]]:
             edges.append(min_ij)
+            S+= cij[min_ij[0]][min_ij[1]]
             added[min_ij[1]] = True
             add_neighbours(min_ij[1], cij, added, queue)
 
-    return edges
+    return edges, S
 
 
 
@@ -134,8 +137,16 @@ def main():
     pprint(cij)
     pprint(tij)
 
-    edges = EigenVill(tij, ai, d)
-    edges1 = Prim(cij)
+    edges, S1 = EigenVill(tij, ai, d, cij)
+    edges1, S2 = Prim(cij)
+
+    pprint("EigenVill")
+    print(S1)
+    print(edges)
+
+    print(S2)
+    pprint("Prim")
+    print(edges1)
 
     circle_x = np.linspace(-r, r, 100)
     circle_y = np.sqrt(r * r - circle_x ** 2)
@@ -148,6 +159,8 @@ def main():
     plt.plot(pointsX, pointsY, 'o', color="gray")
 
     plt.plot(0, 0, 'o', color="blue")
+
+    
 
     for edge_index in edges:
         i, j = edge_index
