@@ -30,14 +30,21 @@ def main():
     xx = np.sum(tau * pointsX) / d
     xy = np.sum(tau * pointsY) / d
 
-    print(np.round(tau,2))
-    print(np.round(points,2))
+    
 
     for pX, pY in points:
         plt.text(pX, pY + 0.5, str(np.round((pX, pY), 2)), fontsize=7)
 
-    print(np.round(xx,2), np.round(xy,2))
-    print(np.round(np.sqrt(xx * xx + xy * xy),2))
+    with open("res_lab2.txt", "w+") as file:
+
+        file.write("tau\t" + str(np.round(tau,2)))
+        file.write("\n")
+        file.write("points\t" + str(np.round(points,2)))
+        file.write("\n")
+        file.write("center\t" + str(np.round(xx,2)) + "\t"+ str(np.round(xy,2)))
+        file.write("\n")
+        file.write("d\t" + str(np.round(np.sqrt(xx * xx + xy * xy),2)))
+        file.write("\n")
 
     circle_x = np.linspace(-r, r, 100)
     circle_y = np.sqrt(r * r - circle_x ** 2)

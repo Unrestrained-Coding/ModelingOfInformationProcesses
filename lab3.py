@@ -68,7 +68,8 @@ def EigenVill(tij, ai, d, cij):
         else:
             get_point[i,j] = True
 
-    return edges, S
+    return edges, S, bandwidth
+
 
 def add_neighbours(i, cij, added, queue):
     for j in range(len(cij)):
@@ -132,21 +133,39 @@ def main():
     tij[1:,0] = 0
     tij[0,1:] = 0
 
-    pprint(ai)
-    pprint(all_points)
-    pprint(cij)
-    pprint(tij)
-
-    edges, S1 = EigenVill(tij, ai, d, cij)
+    edges, S1, bandwidth = EigenVill(tij, ai, d, cij)
     edges1, S2 = Prim(cij)
 
-    pprint("EigenVill")
-    print(S1)
-    print(edges)
+    with open("res_lab3.txt", "w+") as file:
+        file.write("ai\t" + str(ai))
+        file.write("\n")
+        file.write("all_points\t" + str(all_points))
+        file.write("\n")
 
-    print(S2)
-    pprint("Prim")
-    print(edges1)
+        file.write("bandwidth\t" + str(bandwidth))
+        file.write("\n")
+
+        file.write("cij\t" + str(cij))
+        file.write("\n")
+        file.write("tij\t" + str(tij))
+        file.write("\n")
+
+        file.write("EigenVill")
+        file.write("\n")
+        file.write("S1\t" + str(S1))
+        file.write("\n")
+        file.write("edges\t" + str(edges))
+        file.write("\n")
+
+
+        file.write("Prim")
+        file.write("\n")
+        file.write("S2\t" + str(S2))
+        file.write("\n")
+
+        file.write("edges\t" + str((edges1)))
+        file.write("\n")
+
 
     circle_x = np.linspace(-r, r, 100)
     circle_y = np.sqrt(r * r - circle_x ** 2)
