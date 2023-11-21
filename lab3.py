@@ -70,6 +70,50 @@ def EigenVill(tij, ai, d, cij):
 
     return edges, S, bandwidth
 
+def Prim1(cij, ai, d):
+    S = 0
+    bandwidth = [0]
+    bandwidth.extend(ai)
+
+    edges = []
+    added = np.zeros(len(cij), 'bool')
+    
+    while not np.all(added):
+
+        min_value = float('inf')
+        min_ij = None
+        for i in range(1, len(cij)):
+            row = cij[i]
+            for j in range(0, len(row)):
+                cell = row[j]
+                if cell < min_value and not added[i]:
+                    min_ij = (i,j)
+                    min_value = cell
+
+        if min_ij is None:
+            break
+
+        add = True
+        li, lj = min_ij
+        lS = bandwidth[li]+bandwidth[lj]
+        if lS > d:
+            add = False
+        for edge in edges:
+            i,j = edge
+            if j == li:
+                lS += bandwidth[i]
+                li, lj = i,j
+            if lS > d:
+                add = False
+                break
+        
+        if not added[min_ij[0]] and add:
+            edges.append(min_ij)
+            S+= cij[min_ij[0]][min_ij[1]]
+            added[min_ij[0]] = True
+
+    return edges, S
+
 
 def add_neighbours(i, cij, added, queue):
     for j in range(len(cij)):
@@ -110,6 +154,8 @@ def Prim(cij):
 
 
 
+
+
 def main():
     center = (0, 0)
     n = 10
@@ -134,7 +180,12 @@ def main():
     tij[0,1:] = 0
 
     edges, S1, bandwidth = EigenVill(tij, ai, d, cij)
+    edges2, S3 = Prim1(cij, ai, d)
     edges1, S2 = Prim(cij)
+
+    for ci in cij:
+        res = " ".join([str(c) for c in ci])
+        print(res)  
 
     with open("res_lab3.txt", "w+") as file:
         file.write("ai\t" + str(ai))
@@ -145,7 +196,7 @@ def main():
         file.write("bandwidth\t" + str(bandwidth))
         file.write("\n")
 
-        file.write("cij\t" + str(cij))
+        file.write("cij " + str(cij))
         file.write("\n")
         file.write("tij\t" + str(tij))
         file.write("\n")
@@ -166,6 +217,8 @@ def main():
         file.write("edges\t" + str((edges1)))
         file.write("\n")
 
+    print(edges2)
+    print(S3)
 
     circle_x = np.linspace(-r, r, 100)
     circle_y = np.sqrt(r * r - circle_x ** 2)
@@ -213,6 +266,34 @@ def main():
     ax = plt.gca()
     ax.set_aspect('equal', adjustable='box')
     plt.savefig("Prim.jpg")
+    plt.show()
+
+
+    circle_x = np.linspace(-r, r, 100)
+    circle_y = np.sqrt(r * r - circle_x ** 2)
+
+    plt.plot(circle_x, circle_y, linewidth=0.9, color="red")
+    plt.plot(circle_x, -circle_y, linewidth=0.9, color="red")
+
+    ps = np.array(points).T
+    pointsX, pointsY = ps[0], ps[1]
+    plt.plot(pointsX, pointsY, 'o', color="gray")
+
+    plt.plot(0, 0, 'o', color="blue")
+
+    
+
+    for edge_index in edges2:
+        i, j = edge_index
+        x1, y1 = all_points[i]
+        x2, y2 = all_points[j]
+        plt.arrow(x1, y1, (x2-x1)*0.96, (y2-y1)*0.96, width=0.2, color="red")
+        plt.text(x1, y1-1.5, str(i) + "-" + str((x1, y1)), fontsize=6)
+        plt.text(x2, y2 - 1.5, str(j) + "-" + str((x2, y2)), fontsize=6)
+
+    ax = plt.gca()
+    ax.set_aspect('equal', adjustable='box')
+    plt.savefig("Prim1.jpg")
     plt.show()
 
 
