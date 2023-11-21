@@ -17,7 +17,7 @@ def get_points_on_circle(n, r):
 
 
 def d(x, y):
-    return (x[0] - y[0])**2 + (x[1] - y[1])**2
+    return np.round(np.sqrt((x[0] - y[0])**2 + (x[1] - y[1])**2), 2)
 
 
 def get_matrix_cost(points):
